@@ -1,4 +1,3 @@
 SELECT id, name, email, password
 FROM users
-WHERE email = 'tristanjacobs@gmail.com'
-LIMIT 1;
+WHERE email = 'tristanjacobs@gmail.com';
