@@ -78,11 +78,6 @@ const getAllReservations = function(guest_id, limit = 10) {
   FROM reservations
   JOIN properties ON properties.id = reservations.property_id
   `;
-
-  // if (options.city) {
-    
-  // }
-
   return pool.query(queryString + `
   JOIN property_reviews ON property_reviews.property_id = properties.id
   WHERE reservations.guest_id = $1
@@ -105,7 +100,8 @@ exports.getAllReservations = getAllReservations;
  */
 const getAllProperties = function(options, limit = 10) {
   const queryParams = [];
-  console.log(options);
+  console.log('These are the options:',options);
+  console.log('This is the user variable value:', users)
   let queryString = `
   SELECT  properties.*, AVG(property_reviews.rating) AS average_rating
   FROM properties
@@ -115,6 +111,15 @@ const getAllProperties = function(options, limit = 10) {
   if (options.city) {
     queryParams.push(`%${options.city}%`);
     queryString += `WHERE city LIKE $${queryParams.length} `;
+  }
+
+  if (options.owner_id) {
+    queryParams.push(`${options.owner_id}`);
+    queryString += `WHERE owner_id = $${options.length}`;
+  }
+
+  if (options.minimum_price_per_night && options.maximum_price_per_night) {
+    queryParams.push(`${options.minimum_price_per_night}`,`${options.maximum_price_per_night}`)
   }
 
   queryParams.push(limit);
